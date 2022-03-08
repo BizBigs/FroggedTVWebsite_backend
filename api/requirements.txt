@@ -8,3 +8,4 @@ flask-marshmallow==0.14.0
 Flask-SQLAlchemy==2.5.1
 flask_bcrypt==0.7.1
 psycopg2==2.9.3
+steam==1.2.0

@@ -1,6 +1,7 @@
 import datetime
 from . import db, ma
 from .BlogPostModel import BlogPostSchema
+from .ProfileModel import ProfileSchema
 
 class UserModel(db.Model):
   """
@@ -17,6 +18,7 @@ class UserModel(db.Model):
   created_at = db.Column(db.DateTime)
   last_modified = db.Column(db.DateTime)
   blogposts = db.relationship('BlogPostModel', backref='ftv_user', lazy=True)
+  profiles = db.relationship('ProfileModel', backref='ftv_user', lazy=True)
 
   def __repr__(self):
     return '<User Id: %s>' % self.id_user
