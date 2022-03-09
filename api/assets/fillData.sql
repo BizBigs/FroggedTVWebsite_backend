@@ -210,6 +210,120 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.link_ftv_roles_ftv_permissions
     OWNER to admin;
+
+-- Table: public.ftv_team
+
+-- DROP TABLE IF EXISTS public.ftv_team;
+
+CREATE TABLE IF NOT EXISTS public.ftv_team
+(
+    id_team integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    name character varying(50) COLLATE pg_catalog."default" NOT NULL UNIQUE,
+    acronym character varying(5) COLLATE pg_catalog."default" NOT NULL UNIQUE,
+    logo bytea,
+    CONSTRAINT ftv_team_pkey PRIMARY KEY (id_team)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.ftv_team
+    OWNER to admin;
+
+-- Table: public.link_ftv_team_ftv_user
+
+-- DROP TABLE IF EXISTS public.link_ftv_team_ftv_user;
+
+CREATE TABLE IF NOT EXISTS public.link_ftv_team_ftv_user
+(
+    id_link integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    is_captain boolean,
+    is_coach boolean,
+    team_id integer NOT NULL,
+    user_id integer NOT NULL,
+    CONSTRAINT link_ftv_team_ftv_user_pkey PRIMARY KEY (id_link),
+    CONSTRAINT "FK_LINK_TU_FTV_TEAM" FOREIGN KEY (team_id)
+        REFERENCES public.ftv_team (id_team) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT "FK_LINK_TU_FTV_USER" FOREIGN KEY (user_id)
+        REFERENCES public.ftv_user (id_user) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.link_ftv_team_ftv_user
+    OWNER to admin;
+
+-- Table: public.ftv_season
+
+-- DROP TABLE IF EXISTS public.ftv_season;
+
+CREATE TABLE IF NOT EXISTS public.ftv_season
+(
+    id_season integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    name character varying(20) COLLATE pg_catalog."default",
+    season_number integer NOT NULL UNIQUE,
+    logo bytea,
+    CONSTRAINT ftv_season_pkey PRIMARY KEY (id_season)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.ftv_season
+    OWNER to admin;
+
+-- Table: public.ftv_division
+
+-- DROP TABLE IF EXISTS public.ftv_division;
+
+CREATE TABLE IF NOT EXISTS public.ftv_division
+(
+    id_division integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    name character varying(20) COLLATE pg_catalog."default" NOT NULL UNIQUE,
+    CONSTRAINT ftv_division_pkey PRIMARY KEY (id_division)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.ftv_division
+    OWNER to admin;
+
+-- Table: public.link_ftv_season_ftv_division_ftv_team
+
+-- DROP TABLE IF EXISTS public.link_ftv_season_ftv_division_ftv_team;
+
+CREATE TABLE IF NOT EXISTS public.link_ftv_season_ftv_division_ftv_team
+(
+    id_link integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    team_id integer NOT NULL,
+    season_id integer NOT NULL,
+    division_id integer NOT NULL,
+    CONSTRAINT link_ftv_season_ftv_division_ftv_team_pkey PRIMARY KEY (id_link),
+    CONSTRAINT "FK_LINK_TSD_FTV_DIVISION" FOREIGN KEY (division_id)
+        REFERENCES public.ftv_division (id_division) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT "FK_LINK_TSD_FTV_SEASON" FOREIGN KEY (season_id)
+        REFERENCES public.ftv_season (id_season) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT "FK_LINK_TSD_FTV_TEAM" FOREIGN KEY (team_id)
+        REFERENCES public.ftv_team (id_team) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.link_ftv_season_ftv_division_ftv_team
+    OWNER to admin;
 ------------------------------------------------------  INSERT DATAS -------------------------------------------------------------
 
 insert into ftv_user(nickname, email, created_at, last_modified, password) values
