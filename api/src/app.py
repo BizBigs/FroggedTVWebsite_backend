@@ -6,6 +6,8 @@ from flask_marshmallow import Marshmallow
 from flask_restful import Api, Resource
 from .resources.UserResource import UsersListResource
 from .resources.BlogPostResource import BlogPostsListResource
+from .resources.AuthResource import LoginResource, RegisterResource
+
 
 def create_app(env_name):
   """
@@ -24,12 +26,8 @@ def create_app(env_name):
 
   api.add_resource(UsersListResource, '/users')
   api.add_resource(BlogPostsListResource, '/blogposts')
+  api.add_resource(LoginResource, '/login')
+  api.add_resource(RegisterResource, '/register')
 
-  @app.route('/', methods=['GET'])
-  def index():
-    """
-    example endpoint
-    """
-    return 'Congratulations! Your first free is workin'
 
   return app

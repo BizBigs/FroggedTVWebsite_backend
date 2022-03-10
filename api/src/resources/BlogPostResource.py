@@ -1,8 +1,10 @@
 from flask_restful import Resource
+from ..common.authentication.TokenManager import token_required
 from ..models.BlogPostModel import BlogPostModel, blogposts_schema
 
 class BlogPostsListResource(Resource):
-    def get(self):
+    @token_required
+    def get(current_user, self):
         blogposts = BlogPostModel.query.all()
         return blogposts_schema.dump(blogposts)
 
