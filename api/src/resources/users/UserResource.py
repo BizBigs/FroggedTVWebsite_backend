@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from ..models.UserModel import UserModel, users_schema
+from ...models.UserModel import UserModel, users_schema
 
 class UsersListResource(Resource):
     def get(self):

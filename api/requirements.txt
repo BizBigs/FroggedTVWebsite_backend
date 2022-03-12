@@ -9,3 +9,4 @@ Flask-SQLAlchemy==2.5.1
 flask_bcrypt==0.7.1
 psycopg2==2.9.3
 pyjwt==2.3.0
+marshmallow-sqlalchemy==0.28.0

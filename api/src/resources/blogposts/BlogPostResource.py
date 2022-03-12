@@ -1,6 +1,6 @@
 from flask_restful import Resource
-from ..common.authentication.TokenManager import token_required
-from ..models.BlogPostModel import BlogPostModel, blogposts_schema
+from ...common.authentication.TokenManager import token_required
+from ...models.BlogPostModel import BlogPostModel, blogposts_schema
 
 class BlogPostsListResource(Resource):
     @token_required

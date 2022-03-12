@@ -1,10 +1,13 @@
 from flask_restful import Resource
 from flask import Response, request, jsonify, make_response, current_app as app
-from ..models.UserModel import UserModel
+from ...models.UserModel import UserModel, user_schema
 from  werkzeug.security import generate_password_hash, check_password_hash
+from  werkzeug.exceptions import BadRequest
 import uuid
 from datetime import datetime, timedelta
 import jwt
+from marshmallow import ValidationError
+from sqlalchemy import or_
 
 class LoginResource(Resource):
     def post(self):
@@ -49,7 +52,7 @@ class RegisterResource(Resource):
         password = body.get('password')
 
         user = UserModel.query\
-                .filter_by(email = email)\
+                .filter(or_(UserModel.email == email, UserModel.nickname == nickname))\
                 .first()
         if not user:
             # database ORM object
@@ -61,6 +64,11 @@ class RegisterResource(Resource):
                 email = email,
                 password = generate_password_hash(password)
             )
+            try:
+                result = user_schema.load(body)
+            except ValidationError as err:
+                return err.messages, 422
+
             UserModel.addUser(user)
             return make_response('Successfully registered.', 201)
         else:
