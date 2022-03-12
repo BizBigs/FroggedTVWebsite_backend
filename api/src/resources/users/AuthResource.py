@@ -37,7 +37,14 @@ class LoginResource(Resource):
                     'exp' : datetime.utcnow() + timedelta(minutes = 30)
                 }, app.config['JWT_SECRET_KEY'], algorithm='HS256')
 
-                return make_response(jsonify({'token' : token}), 201)
+                return make_response(jsonify({
+                    'user' : {
+                        'public_id': user.public_id,
+                        'nickname': user.nickname,
+                        'created_at': user.created_at,
+                    },
+                    'token' : token
+                }), 201)
 
         return make_response(
                 'Could not verify',
