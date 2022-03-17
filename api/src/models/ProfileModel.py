@@ -1,5 +1,6 @@
 import datetime
 from . import db, ma
+from marshmallow import fields, validate
 
 class ProfileModel(db.Model):
   """

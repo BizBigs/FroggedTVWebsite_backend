@@ -4,6 +4,7 @@ from .BlogPostModel import BlogPostSchema
 from .ProfileModel import ProfileSchema
 from marshmallow import fields, validate
 from sqlalchemy.sql import func
+from .LinkTables.UserToRole import association_table
 
 class UserModel(db.Model):
   """
@@ -22,6 +23,7 @@ class UserModel(db.Model):
   last_modified = db.Column(db.DateTime(timezone=True))
   blogposts = db.relationship('BlogPostModel', backref='ftv_user', lazy=True)
   profiles = db.relationship('ProfileModel', backref='ftv_user', lazy=True)
+  roles = db.relationship("RoleModel", secondary=association_table, back_populates="users")
 
   def addUser(newUser):
     # insert user
